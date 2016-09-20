@@ -1,0 +1,6 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prod="http://Product.biniek.daniel/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <prod:getProducts/>
+    </soapenv:Body>
+</soapenv:Envelope>

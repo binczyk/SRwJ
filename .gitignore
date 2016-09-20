@@ -120,9 +120,5 @@ local.properties
 # Code Recommenders
 .recommenders/
 
-.gitignore
 .idea/
-Backend/
-MiddleTier/
-UI/
 "WDSR - projekt Gie\305\202da.pptx"

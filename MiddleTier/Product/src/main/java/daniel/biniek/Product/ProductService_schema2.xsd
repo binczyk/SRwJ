@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://Product.biniek.daniel/">
+
+  <xs:import namespace="http://Product.biniek.daniel/" schemaLocation="ProductService_schema1.xsd"/>
+
+  <xs:element name="arg0" nillable="true" type="ns1:orderType"/>
+
+  <xs:element name="return" nillable="true" type="ns1:orderType"/>
+</xs:schema>
+
