@@ -1,6 +1,5 @@
 package daniel.biniek.Controller;
 
-import lombok.Getter;
 
 public enum Menu {
     GET_PRODUCTS("Get products"),
@@ -10,11 +9,13 @@ public enum Menu {
     EXIT("Exit"),
     BAD("Bad");
 
-    @Getter
     private String name;
 
     private Menu(String name){
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
 }
