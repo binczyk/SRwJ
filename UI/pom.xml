@@ -9,10 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>Market</module>
-    </modules>
-
     <build>
         <plugins>
             <plugin>
@@ -29,7 +25,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>daniel.biniek.Market.UserInterface</mainClass>
+                    <mainClass>daniel.biniek.UserInterface</mainClass>
                 </configuration>
             </plugin>
 
@@ -53,5 +49,23 @@
             <artifactId>spring-shell</artifactId>
             <version>1.0.0.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.8</version>
+        </dependency>
+
     </dependencies>
 </project>
