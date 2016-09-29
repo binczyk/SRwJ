@@ -5,6 +5,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
+import java.util.Iterator;
 
 public class SOAPClient {
 
@@ -25,7 +26,7 @@ public class SOAPClient {
         } catch (Exception e) {
             System.err.println("Error occurred while sending SOAP Request to Server");
             e.printStackTrace();
-        }finally {
+        } finally {
             return respone;
         }
     }
@@ -77,9 +78,25 @@ public class SOAPClient {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         Source sourceContent = soapResponse.getSOAPPart().getContent();
+
+        Iterator iterator = soapResponse.getSOAPBody().getChildElements();
+        while (iterator.hasNext()) {
+            SOAPElement update = (SOAPElement) iterator.next();
+            String products = update.getAttribute("return");
+            System.out.println(products);
+            java.util.Iterator i = update.getChildElements();
+            while (i.hasNext()) {
+                SOAPElement e = (SOAPElement) i.next();
+                String name = e.getLocalName();
+                String value = e.getValue();
+                System.out.println(value);
+            }
+        }
+        System.out.println();
+/*
         System.out.print("\nResponse SOAP Message = ");
         StreamResult result = new StreamResult(System.out);
-        transformer.transform(sourceContent, result);
+        transformer.transform(sourceContent, result);*/
 
         return "";
     }

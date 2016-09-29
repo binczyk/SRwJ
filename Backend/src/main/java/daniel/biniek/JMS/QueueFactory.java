@@ -13,9 +13,9 @@ public class QueueFactory {
     private static final String URL = "tcp://localhost:61616";
 
     public void start() throws Exception {
-        /*BrokerService broker = new BrokerService();
+      /*  BrokerService broker = new BrokerService();
         broker.setPersistent(false);
-        broker.addConnector("tcp://0.0.0.0:61616");
+        broker.addConnector(URL);
         broker.start();
 
         ActiveMQConnectionFactory activeMQConnectionFactory  =  new ActiveMQConnectionFactory(URL);

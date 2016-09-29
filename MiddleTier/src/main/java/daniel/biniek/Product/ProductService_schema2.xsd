@@ -5,6 +5,6 @@
 
   <xs:element name="arg0" nillable="true" type="ns1:orderType"/>
 
-  <xs:element name="return" nillable="true" type="ns1:orderType"/>
+  <xs:element name="return" nillable="true" type="xs:anyType"/>
 </xs:schema>
 
