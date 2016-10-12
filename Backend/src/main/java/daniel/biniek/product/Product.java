@@ -1,6 +1,8 @@
-package daniel.biniek.ProductImpl;
+package main.java.daniel.biniek.product;
 
-public enum Product {
+import java.io.Serializable;
+
+public enum Product implements Serializable{
     GOLD(1l,"gold",0f),
     SILVER(2l,"silver",0f),
     PALLADIUM(3l,"palladium",0f),

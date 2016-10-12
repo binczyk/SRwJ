@@ -1,8 +1,6 @@
-package daniel.biniek.Utils;
+package main.java.daniel.biniek.product;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public class Generator {
 
@@ -11,12 +9,8 @@ public class Generator {
     private int HOW_MANY =  random.nextInt(4)+1;
     private float MIN = 25.0f;
     private float MAX = 500.0f;
-    public Set<Long> generateIds() {
-        Set<Long> ids = new HashSet<Long>();
-        for(int i=0; i<HOW_MANY;i++){
-            ids.add(Long.valueOf(random.nextInt(4)+1));
-        }
-        return ids;
+    public Long generateIds() {
+        return Long.valueOf(random.nextInt(5)+1);
     }
 
     public float generatePrice(){

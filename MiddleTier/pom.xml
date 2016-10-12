@@ -81,6 +81,11 @@
             <artifactId>jetty-maven-plugin</artifactId>
             <version>9.3.8.v20160314</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.14.1</version>
+        </dependency>
 
     </dependencies>
 </project>

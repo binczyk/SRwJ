@@ -24,7 +24,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>daniel.biniek.UI.backend.BackendInterface</mainClass>
+                    <mainClass>main.java.daniel.biniek.main.BackendInterface</mainClass>
                 </configuration>
             </plugin>
         </plugins>

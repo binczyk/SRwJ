@@ -1,21 +1,15 @@
-package daniel.biniek.ProductImpl;
+package main.java.daniel.biniek.product;
 
 
-import daniel.biniek.Utils.Generator;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class ProductSender {
 
     private Generator generator = new Generator();
 
-    public List<Product> randomProducts(){
-        Set<Long> ids = generator.generateIds();
-        List<Product> products;
-        products = ids.stream().map(id -> getProductById(id)).collect(Collectors.toList());
-
-        return products;
+    public ProductOb randomProduct(){
+        Product product = getProductById(generator.generateIds());
+        ProductOb productOb = new ProductOb(product.getName(),product.getId(),product.getPrice());
+        return productOb;
     }
 
     private Product getProductById(Long id){
