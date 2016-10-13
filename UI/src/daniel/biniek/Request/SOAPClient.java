@@ -9,7 +9,15 @@ import java.util.Iterator;
 
 public class SOAPClient {
 
-    public static String start() throws SOAPException {
+    public static String get() throws SOAPException {
+        return sendRequest("get",new String());
+    }
+
+    public static String create(String type) throws SOAPException {
+        return sendRequest("create", type);
+    }
+
+    private static String sendRequest(String method, String value) {
         String respone = "";
 
         try {
@@ -17,7 +25,7 @@ public class SOAPClient {
 
             // Send SOAP Message to SOAP Server
             String url = "http://localhost:8080/test";
-            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
+            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(method, value), url);
 
             // Process the SOAP Response
             respone = getSOAPResponse(soapResponse);
@@ -31,13 +39,14 @@ public class SOAPClient {
         }
     }
 
+
     private static SOAPConnection createConnection() throws SOAPException {
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         return soapConnectionFactory.createConnection();
     }
 
 
-    private static SOAPMessage createSOAPRequest() throws Exception {
+    private static SOAPMessage createSOAPRequest(String method, String value) throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
@@ -48,28 +57,28 @@ public class SOAPClient {
         SOAPEnvelope envelope = soapPart.getEnvelope();
         envelope.addNamespaceDeclaration("prod", serverURI);
 
-        /*
-        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prod="http://Product.biniek.daniel/">
-            <soapenv:Header/>
-                <soapenv:Body>
-                    <prod:getProducts/>
-                </soapenv:Body>
-        </soapenv:Envelope>
-         */
-
         // SOAP Body
-        SOAPBody soapBody = envelope.getBody();
-        soapBody.addChildElement("getProducts", "prod");
+        if(method.equals("get")){
+            SOAPBody soapBody = envelope.getBody();
+            soapBody.addChildElement("getProducts");
 
-        MimeHeaders headers = soapMessage.getMimeHeaders();
-        headers.addHeader("SOAPAction", serverURI + "getProducts");
+            MimeHeaders headers = soapMessage.getMimeHeaders();
+            headers.addHeader("SOAPAction", serverURI + "getProducts");
+        }else if(method.equals("create")){
+            SOAPBody soapBody = envelope.getBody();
+            //soapBody.addChildElement("createOrder", "prod");
+            ; // ddChildElement("adsasdasdad", "createOrder");
+
+            SOAPElement soapBodyElem = soapBody.addChildElement("createOrder", "prod");
+            SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
+            soapBodyElem1.addTextNode(value);
+
+            MimeHeaders headers = soapMessage.getMimeHeaders();
+            headers.addHeader("SOAPAction", serverURI + "createOrder");
+        }
+
 
         soapMessage.saveChanges();
-
-        /* Print the request message */
-        /*System.out.print("Request SOAP Message = ");
-        soapMessage.writeTo(System.out);
-        System.out.println();*/
 
         return soapMessage;
     }
@@ -93,10 +102,6 @@ public class SOAPClient {
             }
         }
         System.out.println();
-/*
-        System.out.print("\nResponse SOAP Message = ");
-        StreamResult result = new StreamResult(System.out);
-        transformer.transform(sourceContent, result);*/
 
         return "";
     }

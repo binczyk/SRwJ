@@ -1,15 +1,20 @@
 package daniel.biniek.Product;
 
+import main.java.jms.MTJms;
+
 import javax.jws.WebService;
 
 @WebService(endpointInterface="daniel.biniek.Product.ProductService")
 public class ProductServiceImpl implements ProductService{
 
+    MTJms mtJms = new MTJms();
+
+
     public String getProducts() {
-        return "GOLD\nSILVER\nPLATINUM";
+        return mtJms.receiveMessage();
     }
 
-    public OrderType createOrder(OrderType type) {
-        return OrderType.SELL;
+    public void createOrder(String mse) {
+        mtJms.sendMessages(mse);
     }
 }

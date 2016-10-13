@@ -11,7 +11,7 @@ public class ProductController {
     private static String BAD_CHOOICE = "It's a bad choice. Try these:";
 
     private static String getProducts(String soapAction) throws Exception {
-        SOAPClient.start();
+        SOAPClient.get();
         return "";
     }
 
@@ -36,10 +36,10 @@ public class ProductController {
                 getProducts("");
                 break;
             case BUY_PRODUCTS:
-                System.out.println("2");
+                creatOrder("Buy");
                 break;
             case SELL_PRODUCTS:
-                System.out.println("3");
+                creatOrder("Sell");
                 break;
             case SHOW_TRANSACTION:
                 System.out.println("4");
@@ -50,6 +50,10 @@ public class ProductController {
             default:
                 System.out.println(BAD_CHOOICE);
         }
+    }
+
+    private static void creatOrder(String type) throws Exception  {
+        SOAPClient.create(type);
     }
 
     public static Menu convertStringToMenu(String option) {

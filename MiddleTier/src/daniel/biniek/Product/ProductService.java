@@ -12,5 +12,5 @@ public interface ProductService {
     public String getProducts();
 
     @WebMethod(operationName = "createOrder")
-    public OrderType createOrder(OrderType type);
+    public void createOrder(String mse);
 }

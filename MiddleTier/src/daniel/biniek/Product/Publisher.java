@@ -14,14 +14,9 @@ public class Publisher {
         initBroker();
         System.out.println("broker started");
 
-        MTJms receiver = new MTJms();
-        for(;;){
-            receiver.receiveMessage();
-            
-        }
-
-       /* System.out.println("jms reciver");
-        System.out.println("end");*/
+        /*MTJms receiver = new MTJms();
+        String s = receiver.receiveMessage();
+        s.isEmpty();*/
     }
 
     private static void initBroker() throws Exception {
