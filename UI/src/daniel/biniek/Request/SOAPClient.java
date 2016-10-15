@@ -4,13 +4,12 @@ import javax.xml.soap.*;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import java.util.Iterator;
 
 public class SOAPClient {
 
     public static String get() throws SOAPException {
-        return sendRequest("get",new String());
+        return sendRequest("get", new String());
     }
 
     public static String create(String type) throws SOAPException {
@@ -58,25 +57,19 @@ public class SOAPClient {
         envelope.addNamespaceDeclaration("prod", serverURI);
 
         // SOAP Body
-        if(method.equals("get")){
+        if (method.equals("get")) {
             SOAPBody soapBody = envelope.getBody();
-            soapBody.addChildElement("getProducts");
-
+            soapBody.addChildElement("getProducts", "prod");
             MimeHeaders headers = soapMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", serverURI + "getProducts");
-        }else if(method.equals("create")){
+        } else if (method.equals("create")) {
             SOAPBody soapBody = envelope.getBody();
-            //soapBody.addChildElement("createOrder", "prod");
-            ; // ddChildElement("adsasdasdad", "createOrder");
-
             SOAPElement soapBodyElem = soapBody.addChildElement("createOrder", "prod");
             SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
             soapBodyElem1.addTextNode(value);
-
             MimeHeaders headers = soapMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", serverURI + "createOrder");
         }
-
 
         soapMessage.saveChanges();
 

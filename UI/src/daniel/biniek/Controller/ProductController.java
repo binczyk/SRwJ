@@ -33,7 +33,7 @@ public class ProductController {
     public static void chooseAction(Menu menu) throws Exception {
         switch (menu) {
             case GET_PRODUCTS:
-                getProducts("");
+                getProducts("get");
                 break;
             case BUY_PRODUCTS:
                 creatOrder("Buy");

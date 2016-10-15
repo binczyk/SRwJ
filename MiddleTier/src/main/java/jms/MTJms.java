@@ -1,6 +1,8 @@
 package main.java.jms;
 
 
+import main.java.daniel.biniek.JMS.QueueCode;
+import main.java.daniel.biniek.product.ProductOb;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQTextMessage;
@@ -10,11 +12,12 @@ import java.util.Enumeration;
 
 public class MTJms {
 
+    private ActiveMQConnectionFactory connectionFactory;
+
     public String receiveMessage() {
         String products = new String();
 
         try {
-            boolean isEmpty = false;
             ConnectionFactory factory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
             ActiveMQConnection connection = (ActiveMQConnection) factory.createConnection();
@@ -51,6 +54,27 @@ public class MTJms {
             producer.send(message);
             System.out.println("Sent: " + message.getText());
         } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void sendProductToQueue(ProductOb product) {
+        try{
+            Connection connection = connectionFactory.createConnection();
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            connection.start();
+            Destination destination = session.createQueue(QueueCode.MT_TO_BACK_QUEUE.toString());
+            MessageProducer producer = session.createProducer(destination);
+            producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+
+            ObjectMessage message = session.createObjectMessage(product);
+            message.setJMSType("Order");
+            message.setStringProperty("WDSR-System", "OrderProcessor");
+            producer.send(message);
+            producer.close();
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
