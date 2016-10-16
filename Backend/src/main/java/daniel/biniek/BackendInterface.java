@@ -12,9 +12,8 @@ import javax.jms.*;
 public class BackendInterface {
 
     public static void main(String arg[]) throws Exception {
-        sendProductToQueue();
-        initBroker();
-       // System.out.println(receiveMessage());
+        sendProductToQueue(arg[0]);
+        initBroker(arg[0]);
     }
 
     private static void start() {
@@ -62,12 +61,13 @@ public class BackendInterface {
         }
     }
 
-    public static void sendProductToQueue() {
+    public static void sendProductToQueue(String backNo) {
         ProductSender productSender = new ProductSender();
 
         try {
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
+            connectionFactory.setTrustAllPackages(true);
             Connection connection = connectionFactory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             connection.start();
@@ -75,7 +75,7 @@ public class BackendInterface {
             MessageProducer producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             ProductOb productOb = productSender.randomProduct();
-            productOb.setBackName(QueueCode.MT_TO_BACK_QUEUE.toString() + "." + (Math.round(Math.random() * 100)));
+            productOb.setBackName(QueueCode.MT_TO_BACK_QUEUE.toString() + "." + backNo);
             ObjectMessage message = session.createObjectMessage();
             message.setObject(productOb);
             message.setJMSType("Product");
@@ -88,9 +88,9 @@ public class BackendInterface {
         }
     }
 
-    private static void initBroker() throws Exception {
+    private static void initBroker(String backno) throws Exception {
         BrokerService broker = new BrokerService();
-        broker.addConnector("tcp://localhost:61677");
+        broker.addConnector("tcp://localhost:619" + backno);
         broker.start();
     }
 

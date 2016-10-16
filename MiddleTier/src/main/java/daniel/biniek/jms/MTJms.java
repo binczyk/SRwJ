@@ -16,24 +16,23 @@ public class MTJms {
         ActiveMQConnection connection = null;
         Queue queue = null;
         try {
-            ConnectionFactory factory = new ActiveMQConnectionFactory(
+            ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
+            factory.setTrustAllPackages(true);
             connection = (ActiveMQConnection) factory.createConnection();
-            /*Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue(MTQueueCode.BACK_TO_MT_QUEUE.toString());*/
 
             QueueSession session = connection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
             queue = session.createQueue(MTQueueCode.BACK_TO_MT_QUEUE.toString());
             connection.start();
 
             QueueBrowser browser = session.createBrowser(queue);
-            Enumeration<ObjectMessage> messagesInQueue = browser.getEnumeration();
+            Enumeration<?> messagesInQueue = browser.getEnumeration();
             while (messagesInQueue.hasMoreElements()) {
-
-                if (messagesInQueue.nextElement() instanceof ProductOb) {
-                    ProductOb product = (ProductOb) messagesInQueue.nextElement();
+                ObjectMessage objectMessage = (ObjectMessage) messagesInQueue.nextElement();
+                if (objectMessage.getObject() instanceof ProductOb) {
+                    ProductOb product = (ProductOb) objectMessage.getObject();
                     System.out.println(product.getName() + " " + product.getPrice() + " " + product.getBackName());
-                    products += product.getName() + " " + product.getPrice() + " " + product.getBackName();
+                    products += product.getName() + " " + product.getPrice() + " " + product.getBackName() + "\n";
                 }
             }
 
