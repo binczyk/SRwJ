@@ -1,6 +1,6 @@
 package daniel.biniek.Product;
 
-import main.java.jms.MTJms;
+import daniel.biniek.jms.MTJms;
 
 import javax.jms.JMSException;
 import javax.jws.WebService;
@@ -8,11 +8,15 @@ import javax.jws.WebService;
 @WebService(endpointInterface="daniel.biniek.Product.ProductService")
 public class ProductServiceImpl implements ProductService{
 
-    MTJms mtJms = new MTJms();
+    private MTJms mtJms = new MTJms();
 
-
-    public String getProducts() throws JMSException {
-        return mtJms.receiveMessage();
+    public String getProducts(){
+        try {
+            return mtJms.receiveMessage();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+        return new String();
     }
 
     public void createOrder(String mse) {

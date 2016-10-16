@@ -1,4 +1,4 @@
-package main.java.daniel.biniek.product;
+package daniel.biniek.product;
 
 
 public class ProductSender {

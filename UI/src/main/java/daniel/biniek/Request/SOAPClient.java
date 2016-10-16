@@ -50,7 +50,7 @@ public class SOAPClient {
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
 
-        String serverURI = "http://Product.biniek.daniel/";
+        String serverURI = "http://Product.biniek.daniel/ProductService/";
 
         // SOAP Envelope
         SOAPEnvelope envelope = soapPart.getEnvelope();
@@ -59,16 +59,16 @@ public class SOAPClient {
         // SOAP Body
         if (method.equals("get")) {
             SOAPBody soapBody = envelope.getBody();
-            soapBody.addChildElement("getProducts", "prod");
+            soapBody.addChildElement("getProductsRequest", "prod");
             MimeHeaders headers = soapMessage.getMimeHeaders();
-            headers.addHeader("SOAPAction", serverURI + "getProducts");
+            headers.addHeader("SOAPAction", serverURI + "getProductsRequest");
         } else if (method.equals("create")) {
             SOAPBody soapBody = envelope.getBody();
-            SOAPElement soapBodyElem = soapBody.addChildElement("createOrder", "prod");
+            SOAPElement soapBodyElem = soapBody.addChildElement("createOrderRequest", "prod");
             SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
             soapBodyElem1.addTextNode(value);
             MimeHeaders headers = soapMessage.getMimeHeaders();
-            headers.addHeader("SOAPAction", serverURI + "createOrder");
+            headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
         }
 
         soapMessage.saveChanges();

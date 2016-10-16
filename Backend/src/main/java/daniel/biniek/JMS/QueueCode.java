@@ -1,4 +1,4 @@
-package main.java.daniel.biniek.JMS;
+package daniel.biniek.JMS;
 
 public enum QueueCode {
 

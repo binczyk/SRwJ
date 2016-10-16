@@ -1,9 +1,8 @@
-package main.java.daniel.biniek.main;
+package daniel.biniek;
 
-import main.java.daniel.biniek.JMS.QueueCode;
-import main.java.daniel.biniek.product.ProductOb;
-import main.java.daniel.biniek.product.ProductSender;
-import main.java.jms.MTQueueCode;
+import daniel.biniek.JMS.QueueCode;
+import daniel.biniek.product.ProductOb;
+import daniel.biniek.product.ProductSender;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
@@ -15,7 +14,7 @@ public class BackendInterface {
     public static void main(String arg[]) throws Exception {
         sendProductToQueue();
         initBroker();
-        System.out.println(receiveMessage());
+       // System.out.println(receiveMessage());
     }
 
     private static void start() {
@@ -29,7 +28,7 @@ public class BackendInterface {
             TextMessage message = session.createTextMessage();
             ProductSender productSender = new ProductSender();
             ProductOb productOb = productSender.randomProduct();
-            message.setText("bacend: " + QueueCode.MT_TO_BACK_QUEUE.toString()+ "." + (Math.round(Math.random() * 100)) +
+            message.setText("bacend: " + QueueCode.MT_TO_BACK_QUEUE.toString() + "." + (Math.round(Math.random() * 100)) +
                     " product: " + productOb.getName() + " price: " + productOb.getPrice());
             producer.send(message);
             System.out.println("Sent: " + message.getText());
@@ -46,7 +45,7 @@ public class BackendInterface {
             Connection connection = factory.createConnection();
             connection.start();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue(MTQueueCode.MT_TO_BACK_QUEUE.toString());
+            Destination destination = session.createQueue(QueueCode.MT_TO_BACK_QUEUE.toString());
             MessageConsumer consumer = session.createConsumer(destination);
             Message message = consumer.receive();
 
@@ -89,10 +88,9 @@ public class BackendInterface {
         }
     }
 
-
     private static void initBroker() throws Exception {
         BrokerService broker = new BrokerService();
-        broker.addConnector("tcp://localhost:61617");
+        broker.addConnector("tcp://localhost:61677");
         broker.start();
     }
 

@@ -1,5 +1,4 @@
-package main.java.jms;
-
+package daniel.biniek.jms;
 
 public enum MTQueueCode {
 

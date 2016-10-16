@@ -1,7 +1,6 @@
-package main.java.jms;
+package daniel.biniek.jms;
 
-
-
+import daniel.biniek.product.ProductOb;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -31,11 +30,11 @@ public class MTJms {
             Enumeration<ObjectMessage> messagesInQueue = browser.getEnumeration();
             while (messagesInQueue.hasMoreElements()) {
 
-                /*if (messagesInQueue.nextElement() instanceof ProductOb) {
+                if (messagesInQueue.nextElement() instanceof ProductOb) {
                     ProductOb product = (ProductOb) messagesInQueue.nextElement();
                     System.out.println(product.getName() + " " + product.getPrice() + " " + product.getBackName());
                     products += product.getName() + " " + product.getPrice() + " " + product.getBackName();
-                }*/
+                }
             }
 
         } catch (JMSException e) {

@@ -25,7 +25,7 @@ public interface ProductService {
 
 
     /**
-     * 
+     *
      * @return
      *     returns mypackage.OrderType
      */
@@ -35,7 +35,7 @@ public interface ProductService {
     public OrderType getProducts();
 
     /**
-     * 
+     *
      * @param arg0
      * @return
      *     returns mypackage.OrderType

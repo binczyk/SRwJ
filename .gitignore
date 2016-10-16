@@ -122,3 +122,9 @@ local.properties
 
 .idea/
 "WDSR - projekt Gie\305\202da.pptx"
+
+*.data
+*.redo
+*.log
+*.pptx#
+lock

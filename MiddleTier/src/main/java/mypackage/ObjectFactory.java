@@ -1,4 +1,3 @@
-
 package mypackage;
 
 import javax.xml.bind.annotation.XmlRegistry;
