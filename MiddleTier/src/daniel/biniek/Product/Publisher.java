@@ -1,6 +1,5 @@
 package daniel.biniek.Product;
 
-import main.java.jms.MTJms;
 import org.apache.activemq.broker.BrokerService;
 
 import javax.xml.ws.Endpoint;
@@ -13,10 +12,6 @@ public class Publisher {
 
         initBroker();
         System.out.println("broker started");
-
-        /*MTJms receiver = new MTJms();
-        String s = receiver.receiveMessage();
-        s.isEmpty();*/
     }
 
     private static void initBroker() throws Exception {

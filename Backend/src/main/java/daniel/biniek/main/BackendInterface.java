@@ -63,9 +63,9 @@ public class BackendInterface {
         }
     }
 
-
     public static void sendProductToQueue() {
         ProductSender productSender = new ProductSender();
+
         try {
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
@@ -77,7 +77,8 @@ public class BackendInterface {
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             ProductOb productOb = productSender.randomProduct();
             productOb.setBackName(QueueCode.MT_TO_BACK_QUEUE.toString() + "." + (Math.round(Math.random() * 100)));
-            ObjectMessage message = session.createObjectMessage(productOb);
+            ObjectMessage message = session.createObjectMessage();
+            message.setObject(productOb);
             message.setJMSType("Product");
             message.setStringProperty("WDSR", "ProductProcessor");
             producer.send(message);

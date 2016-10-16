@@ -1,11 +1,9 @@
 package main.java.jms;
 
 
-import main.java.daniel.biniek.JMS.QueueCode;
-import main.java.daniel.biniek.product.ProductOb;
+
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.command.ActiveMQTextMessage;
 
 import javax.jms.*;
 import java.util.Enumeration;
@@ -14,29 +12,37 @@ public class MTJms {
 
     private ActiveMQConnectionFactory connectionFactory;
 
-    public String receiveMessage() {
+    public String receiveMessage() throws JMSException {
         String products = new String();
-
+        ActiveMQConnection connection = null;
+        Queue queue = null;
         try {
             ConnectionFactory factory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
-            ActiveMQConnection connection = (ActiveMQConnection) factory.createConnection();
-            connection.start();
+            connection = (ActiveMQConnection) factory.createConnection();
+            /*Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Destination destination = session.createQueue(MTQueueCode.BACK_TO_MT_QUEUE.toString());*/
+
             QueueSession session = connection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-            Queue queue = session.createQueue(MTQueueCode.BACK_TO_MT_QUEUE.toString());
+            queue = session.createQueue(MTQueueCode.BACK_TO_MT_QUEUE.toString());
+            connection.start();
+
             QueueBrowser browser = session.createBrowser(queue);
-            Enumeration<?> messagesInQueue = browser.getEnumeration();
-           // Destination destination = session.createQueue(MTQueueCode.BACK_TO_MT_QUEUE.toString());
-           // MessageConsumer consumer = session.createConsumer(destination);
+            Enumeration<ObjectMessage> messagesInQueue = browser.getEnumeration();
             while (messagesInQueue.hasMoreElements()) {
-                Message queueMessage = (Message) messagesInQueue.nextElement();
-                System.out.println(((ActiveMQTextMessage) queueMessage).getText());
-                products += ((ActiveMQTextMessage) queueMessage).getText() + "\n";
+
+                /*if (messagesInQueue.nextElement() instanceof ProductOb) {
+                    ProductOb product = (ProductOb) messagesInQueue.nextElement();
+                    System.out.println(product.getName() + " " + product.getPrice() + " " + product.getBackName());
+                    products += product.getName() + " " + product.getPrice() + " " + product.getBackName();
+                }*/
             }
 
         } catch (JMSException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
+           /* connection.stop();
+            connection.destroyDestination(ActiveMQDestination.transform(queue));*/
             return products;
         }
     }
@@ -58,9 +64,9 @@ public class MTJms {
         }
     }
 
-
+/*
     public void sendProductToQueue(ProductOb product) {
-        try{
+        try {
             Connection connection = connectionFactory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -74,10 +80,10 @@ public class MTJms {
             message.setStringProperty("WDSR-System", "OrderProcessor");
             producer.send(message);
             producer.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
 }
