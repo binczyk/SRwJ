@@ -12,6 +12,9 @@
       <output>
         <soap:body use="literal" namespace="http://Product.biniek.daniel/"/>
       </output>
+      <fault name="JMSException">
+        <soap:fault name="JMSException" use="literal"/>
+      </fault>
     </operation>
     <operation name="createOrder">
       <soap:operation soapAction=""/>

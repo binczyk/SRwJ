@@ -7,8 +7,10 @@ public class ProductOb implements Serializable{
     String name;
     Long id;
     float price;
-
     String backName;
+
+    public ProductOb() {
+    }
 
     public ProductOb(String name, Long id, float price) {
         this.name = name;
@@ -16,6 +18,12 @@ public class ProductOb implements Serializable{
         this.price = price;
     }
 
+    public ProductOb(String name, Long id, float price, String backName) {
+        this.name = name;
+        this.id = id;
+        this.price = price;
+        this.backName = backName;
+    }
 
     public String getName() {
         return name;
