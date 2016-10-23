@@ -34,7 +34,7 @@ public class MTJms {
                 ObjectMessage objectMessage = (ObjectMessage) messagesInQueue.nextElement();
                 if (objectMessage.getObject() instanceof ProductOb) {
                     ProductOb product = (ProductOb) objectMessage.getObject();
-                    System.out.println(product.getName() + " " + product.getPrice() + " " + product.getBackName());
+                    System.out.println(product.toString());
                     productObs.add(product);
                 }
             }

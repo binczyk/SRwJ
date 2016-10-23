@@ -17,26 +17,6 @@ public class BackendInterface {
         initBroker();
     }
 
-    private static void start() {
-        try {
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
-            Connection connection = connectionFactory.createConnection();
-            connection.start();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue(QueueCode.BACK_TO_MT_QUEUE.toString());
-            MessageProducer producer = session.createProducer(destination);
-            TextMessage message = session.createTextMessage();
-            ProductSender productSender = new ProductSender();
-            ProductOb productOb = productSender.randomProduct();
-            message.setText("bacend: " + QueueCode.MT_TO_BACK_QUEUE.toString() + "." + (Math.round(Math.random() * 100)) +
-                    " product: " + productOb.getName() + " price: " + productOb.getPrice());
-            producer.send(message);
-            System.out.println("Sent: " + message.getText());
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-    }
-
     private static String receiveMessage() {
         String products = new String();
         try {

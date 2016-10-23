@@ -45,7 +45,7 @@ public class ProductController {
         List<ProductOb> productObs = getProducts(METHOD.get.name());
         switch (menu) {
             case GET_PRODUCTS:
-                productObs.forEach(pr -> System.out.println(pr.getName() + " " + pr.getPrice()));
+                productObs.forEach(pr -> System.out.println(pr.getName() + " buy: " + pr.getPriceBuy() + " sell: " + pr.getPriceSell()));
                 System.out.println();
                 break;
             case BUY_PRODUCTS:
@@ -83,7 +83,7 @@ public class ProductController {
 
         ProductOb smallest = collect.get(0);
         for(ProductOb productOb : collect){
-            if(productOb.getPrice() < smallest.getPrice()){
+            if(productOb.getPriceBuy() < smallest.getPriceBuy()){
                 smallest = productOb;
             }
         }
@@ -93,7 +93,7 @@ public class ProductController {
     private static ProductOb getMax(List<ProductOb> collect) {
         ProductOb smallest = collect.get(0);
         for(ProductOb productOb : collect){
-            if(productOb.getPrice() > smallest.getPrice()){
+            if(productOb.getPriceSell() > smallest.getPriceSell()){
                 smallest = productOb;
             }
         }

@@ -105,7 +105,7 @@ public class SOAPClient {
 
     private static ProductOb preperProduct(Map<String, String> productMap) {
         return new ProductOb(productMap.get("name"), Long.parseLong(productMap.get("id")),
-                Float.parseFloat(productMap.get("price")), productMap.get("backName"));
+                Float.parseFloat(productMap.get("priceBuy")), Float.parseFloat(productMap.get("priceSell")), productMap.get("backName"));
     }
 }
 
