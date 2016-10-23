@@ -8,12 +8,13 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 
 import javax.jms.*;
+import java.net.ServerSocket;
 
 public class BackendInterface {
 
     public static void main(String arg[]) throws Exception {
         sendProductToQueue(arg[0]);
-        initBroker(arg[0]);
+        initBroker();
     }
 
     private static void start() {
@@ -88,9 +89,12 @@ public class BackendInterface {
         }
     }
 
-    private static void initBroker(String backno) throws Exception {
+    private static void initBroker() throws Exception {
+        ServerSocket socket = new ServerSocket(0);
         BrokerService broker = new BrokerService();
-        broker.addConnector("tcp://localhost:619" + backno);
+        socket.close();
+        String bindAddress = "tcp://localhost:" + socket.getLocalPort();
+        broker.addConnector(bindAddress);
         broker.start();
     }
 

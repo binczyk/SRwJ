@@ -40,22 +40,19 @@ public class ProductController {
     }
 
     public static void chooseAction(Menu menu) throws Exception {
-        List<ProductOb> productObs;
         Scanner in = new Scanner(System.in);
         String product;
+        List<ProductOb> productObs = getProducts(METHOD.get.name());
         switch (menu) {
             case GET_PRODUCTS:
-                productObs = getProducts(METHOD.get.name());
                 productObs.forEach(pr -> System.out.println(pr.getName() + " " + pr.getPrice()));
                 System.out.println();
                 break;
             case BUY_PRODUCTS:
-                productObs = getProducts(METHOD.get.name());
                 product = in.nextLine();
                 creatOrder(METHOD.Buy.name(), getBestProductByNameAndMethod(product, METHOD.Buy.name(), productObs));
                 break;
             case SELL_PRODUCTS:
-                productObs = getProducts(METHOD.get.name());
                 product = in.nextLine();
                 creatOrder(METHOD.Sell.name(), getBestProductByNameAndMethod(product, METHOD.Sell.name(), productObs));
                 break;
