@@ -16,7 +16,10 @@ public class BackendInterface implements Runnable {
     private static String threadName;
 
     public static void main(String arg[]) throws Exception {
-        threadName = arg[0];
+        ServerSocket socket = new ServerSocket(0);
+        threadName = String.valueOf(socket.getLocalPort());
+        socket.close();
+
         BackendInterface backend = new BackendInterface(threadName);
         backend.start();
     }
@@ -49,15 +52,13 @@ public class BackendInterface implements Runnable {
     }
 
     private static void initBroker() throws Exception {
-        ServerSocket socket = new ServerSocket(0);
         BrokerService broker = new BrokerService();
-        socket.close();
-        String bindAddress = "tcp://localhost:" + socket.getLocalPort();
+        String bindAddress = "tcp://localhost:" + threadName;
         broker.addConnector(bindAddress);
         broker.start();
     }
 
-    public static void receiveMessage2(String backNo) throws JMSException {
+    public static void receiveMessage(String backNo) throws JMSException {
         ActiveMQConnection connection;
         Queue queue;
         try {
@@ -96,7 +97,7 @@ public class BackendInterface implements Runnable {
             initBroker();
             while (true) {
                 System.out.println("Refresh\n");
-                receiveMessage2(threadName);
+                receiveMessage(threadName);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +111,7 @@ public class BackendInterface implements Runnable {
 
     public BackendInterface(String name) {
         threadName = name;
-        System.out.println("Creating " +  threadName );
+        System.out.println("Creating " +  threadName);
     }
 }
 
