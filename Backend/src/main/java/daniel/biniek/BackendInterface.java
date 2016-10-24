@@ -6,22 +6,19 @@ import daniel.biniek.product.ProductSender;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
-import org.springframework.ui.context.Theme;
 
 import javax.jms.*;
 import java.net.ServerSocket;
 import java.util.Enumeration;
 
-public class BackendInterface {
+public class BackendInterface implements Runnable {
+
+    private static String threadName;
 
     public static void main(String arg[]) throws Exception {
-        Thread thread = new Thread();
-        sendProductToQueue(arg[0]);
-        initBroker();
-        while(true){
-            System.out.println("Refresh\n");
-            receiveMessage2(arg[0]);
-        }
+        threadName = arg[0];
+        BackendInterface backend = new BackendInterface(threadName);
+        backend.start();
     }
 
     public static void sendProductToQueue(String backNo) {
@@ -92,7 +89,29 @@ public class BackendInterface {
         }
     }
 
+    @Override
+    public void run() {
+        sendProductToQueue(threadName);
+        try {
+            initBroker();
+            while (true) {
+                System.out.println("Refresh\n");
+                receiveMessage2(threadName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void start() {
+        System.out.println("Starting " + threadName);
+        run();
+    }
+
+    public BackendInterface(String name) {
+        threadName = name;
+        System.out.println("Creating " +  threadName );
+    }
 }
 
 
