@@ -33,7 +33,7 @@ public class ProductController {
         return sb.toString();
     }
 
-    private static enum METHOD{
+    private enum METHOD{
         Buy,
         Sell,
         get
@@ -45,7 +45,7 @@ public class ProductController {
         List<ProductOb> productObs = getProducts(METHOD.get.name());
         switch (menu) {
             case GET_PRODUCTS:
-                productObs.forEach(pr -> System.out.println(pr.getName() + " buy: " + pr.getPriceBuy() + " sell: " + pr.getPriceSell()));
+                productObs.forEach(pr -> System.out.println(pr.getName() + " buy: " + pr.getPriceBuy() + " sell: " + pr.getPriceSell() + " " + pr.getBackName()));
                 System.out.println();
                 break;
             case BUY_PRODUCTS:

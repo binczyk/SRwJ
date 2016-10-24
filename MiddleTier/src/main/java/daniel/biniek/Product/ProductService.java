@@ -16,5 +16,5 @@ public interface ProductService {
     public ProductOb[] getProducts() throws JMSException;
 
     @WebMethod(operationName = "createOrder")
-    public void createOrder(String mse, String productName);
+    public void createOrder(String mse, String productName, String destination);
 }

@@ -69,7 +69,9 @@ public class SOAPClient {
             SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
             soapBodyElem1.addTextNode(value);
             SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("arg1");
-            soapBodyElem2.addTextNode(additionalAttribut.toString());
+            soapBodyElem2.addTextNode(additionalAttribut.getName());
+            SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("arg2");
+            soapBodyElem3.addTextNode(additionalAttribut.getBackName());
             MimeHeaders headers = soapMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
         }

@@ -8,7 +8,8 @@
       <xs:element name="backName" type="xs:string" minOccurs="0"/>
       <xs:element name="id" type="xs:long" minOccurs="0"/>
       <xs:element name="name" type="xs:string" minOccurs="0"/>
-      <xs:element name="price" type="xs:float"/>
+      <xs:element name="priceBuy" type="xs:float"/>
+      <xs:element name="priceSell" type="xs:float"/>
     </xs:sequence>
   </xs:complexType>
 

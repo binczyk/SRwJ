@@ -7,6 +7,8 @@
 
   <xs:element name="arg1" nillable="true" type="xs:string"/>
 
+  <xs:element name="arg2" nillable="true" type="xs:string"/>
+
   <xs:element name="return" nillable="true" type="ns1:productObArray"/>
 </xs:schema>
 

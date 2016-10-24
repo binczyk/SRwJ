@@ -14,9 +14,8 @@ public class MTJms {
     private ActiveMQConnectionFactory connectionFactory;
 
     public List<ProductOb> receiveMessage() throws JMSException {
-        String products = new String();
-        ActiveMQConnection connection = null;
-        Queue queue = null;
+        ActiveMQConnection connection;
+        Queue queue;
         ArrayList<ProductOb> productObs = new ArrayList<>();
         try {
             ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(
@@ -48,16 +47,16 @@ public class MTJms {
         }
     }
 
-    public void sendMessages(String mse) {
+    public void sendMessages(String mse, String productName, String backendName) {
         try {
             ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
             Connection connection = connectionFactory.createConnection();
             connection.start();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue("MT_TO_BACK_QUEUE");
+            Destination destination = session.createQueue(backendName);
             MessageProducer producer = session.createProducer(destination);
             TextMessage message = session.createTextMessage();
-            message.setText(mse);
+            message.setText(productName + ";" + mse);
             producer.send(message);
             System.out.println("Sent: " + message.getText());
         } catch (JMSException e) {
