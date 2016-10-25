@@ -1,4 +1,4 @@
-package daniel.biniek.jms;
+package daniel.biniek.Controller;
 
 
 public class ReadProduct {
@@ -16,5 +16,18 @@ public class ReadProduct {
         stringBuilder.append(value[3]);
 
         return stringBuilder.toString();
+    }
+
+    public String readName(String prod) {
+        return prod.split(";")[0];
+    }
+    public String readBuy(String prod) {
+        return prod.split(";")[1];
+    }
+    public String readSell(String prod) {
+        return prod.split(";")[2];
+    }
+    public String readBack(String prod) {
+        return prod.split(";")[3];
     }
 }

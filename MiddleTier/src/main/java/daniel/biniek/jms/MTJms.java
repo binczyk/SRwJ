@@ -10,9 +10,6 @@ import java.util.List;
 
 public class MTJms {
 
-    private ActiveMQConnectionFactory connectionFactory;
-    private ReadProduct readProduct = new ReadProduct();
-
     public List<String> receiveMessage() throws JMSException {
         ActiveMQConnection connection;
         Queue queue;
@@ -32,7 +29,7 @@ public class MTJms {
             while (messagesInQueue.hasMoreElements()) {
                 Message message = (Message) messagesInQueue.nextElement();
                 if (message instanceof TextMessage) {
-                    String prod = readProduct.read(((TextMessage) message).getText());
+                    String prod = ((TextMessage) message).getText();
                     productObs.add(prod);
                     System.out.println(prod);
                 }

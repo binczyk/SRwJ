@@ -1,5 +1,7 @@
 package daniel.biniek.Request;
 
+import daniel.biniek.Controller.ReadProduct;
+
 import javax.xml.soap.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,24 +9,29 @@ import java.util.List;
 
 public class SOAPClient {
 
+    private static ReadProduct readProduct = new ReadProduct();
+
     public static List<String> get() throws SOAPException {
-        return sendRequest("get", new String());
+        return sendRequest("get");
     }
 
     public static void create(String type, String product) throws SOAPException {
-        sendRequest("create", type, product);
+        sendRequest("create", type, readProduct.readName(product), readProduct.readBack(product));
     }
 
-    private static List<String> sendRequest(String method, String value, String... additionalAttribut) {
+    private static List<String> sendRequest(String method, String... additionalAttribut) {
         List<String> respone = new ArrayList<>();
-
+        SOAPMessage soapResponse;
         try {
             SOAPConnection soapConnection = createConnection();
 
             // Send SOAP Message to SOAP Server
             String url = "http://localhost:8080/test";
-            String pr = additionalAttribut.length > 0 ? additionalAttribut[0] : null;
-            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(method, value, pr), url);
+            if (method.equals("get")) {
+                soapResponse = soapConnection.call(getProducts(), url);
+            } else {
+                soapResponse = soapConnection.call(createOrder(additionalAttribut[0], additionalAttribut[1], additionalAttribut[2]), url);
+            }
 
             // Process the SOAP Response
             respone.addAll(getSOAPResponse(soapResponse));
@@ -45,7 +52,7 @@ public class SOAPClient {
     }
 
 
-    private static SOAPMessage createSOAPRequest(String method, String value, String... additionalAttribut) throws Exception {
+    private static SOAPMessage getProducts() throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
@@ -57,23 +64,38 @@ public class SOAPClient {
         envelope.addNamespaceDeclaration("prod", serverURI);
 
         // SOAP Body
-        if (method.equals("get")) {
-            SOAPBody soapBody = envelope.getBody();
-            soapBody.addChildElement("getProductsRequest", "prod");
-            MimeHeaders headers = soapMessage.getMimeHeaders();
-            headers.addHeader("SOAPAction", serverURI + "getProductsRequest");
-        } else if (method.equals("create")) {
-            SOAPBody soapBody = envelope.getBody();
-            SOAPElement soapBodyElem = soapBody.addChildElement("createOrderRequest", "prod");
-            SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
-            soapBodyElem1.addTextNode(value);
-            SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("arg1");
-            soapBodyElem2.addTextNode(additionalAttribut[0]);
-            SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("arg2");
-            soapBodyElem3.addTextNode(additionalAttribut[1]);
-            MimeHeaders headers = soapMessage.getMimeHeaders();
-            headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
-        }
+        SOAPBody soapBody = envelope.getBody();
+        soapBody.addChildElement("getProductsRequest", "prod");
+        MimeHeaders headers = soapMessage.getMimeHeaders();
+        headers.addHeader("SOAPAction", serverURI + "getProductsRequest");
+
+        soapMessage.saveChanges();
+
+        return soapMessage;
+    }
+
+    private static SOAPMessage createOrder(String... additionalAttribut) throws Exception {
+        MessageFactory messageFactory = MessageFactory.newInstance();
+        SOAPMessage soapMessage = messageFactory.createMessage();
+        SOAPPart soapPart = soapMessage.getSOAPPart();
+
+        String serverURI = "http://Product.biniek.daniel/ProductService/";
+
+        // SOAP Envelope
+        SOAPEnvelope envelope = soapPart.getEnvelope();
+        envelope.addNamespaceDeclaration("prod", serverURI);
+
+        // SOAP Body
+        SOAPBody soapBody = envelope.getBody();
+        SOAPElement soapBodyElem = soapBody.addChildElement("createOrderRequest", "prod");
+        SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
+        soapBodyElem1.addTextNode(additionalAttribut[0]);
+        SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("arg1");
+        soapBodyElem2.addTextNode(additionalAttribut[1]);
+        SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("arg2");
+        soapBodyElem3.addTextNode(additionalAttribut[2]);
+        MimeHeaders headers = soapMessage.getMimeHeaders();
+        headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
 
         soapMessage.saveChanges();
 

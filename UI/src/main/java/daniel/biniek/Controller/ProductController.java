@@ -1,39 +1,42 @@
 package daniel.biniek.Controller;
 
 import daniel.biniek.Request.SOAPClient;
-import daniel.biniek.product.ProductOb;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ProductController {
 
     private static String CHOOSE_OPTION = "Choose option:";
     private static String BAD_CHOOICE = "It's a bad choice. Try these:";
+    private static List<String> productObs = new ArrayList<>();
+
+    private static ReadProduct readProduct = new ReadProduct();
 
     private static List<String> getProducts(String soapAction) throws Exception {
         return SOAPClient.get();
     }
 
-    private static String getFileContent(String path){
+    private static String getFileContent(String path) {
         StringBuilder sb = new StringBuilder();
         try {
             BufferedReader in = new BufferedReader(new FileReader(path));
             String str;
-            while ((str = in.readLine()) != null){
+            while ((str = in.readLine()) != null) {
                 sb.append(str);
             }
             in.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return sb.toString();
     }
 
-    private enum METHOD{
+    private enum METHOD {
         Buy,
         Sell,
         get
@@ -42,19 +45,31 @@ public class ProductController {
     public static void chooseAction(Menu menu) throws Exception {
         Scanner in = new Scanner(System.in);
         String product;
-        List<String> productObs = getProducts(METHOD.get.name());
         switch (menu) {
             case GET_PRODUCTS:
-                productObs.forEach(pr -> System.out.println(pr));
+                productObs = getProducts(METHOD.get.name());
+                productObs.forEach(pr -> System.out.println(readProduct.read(pr)));
                 System.out.println();
                 break;
             case BUY_PRODUCTS:
-                product = in.nextLine();
-              //  creatOrder(METHOD.Buy.name(), getBestProductByNameAndMethod(product, METHOD.Buy.name(), productObs));
+                if (productObs.isEmpty()) {
+                    System.out.println("Download list of products");
+                } else {
+                    System.out.println("Product name:");
+                    product = in.nextLine();
+                    String best = getBestProductByNameAndMethod(product, METHOD.Buy.name(), productObs);
+                    creatOrder(METHOD.Buy.name(), best);
+                }
                 break;
             case SELL_PRODUCTS:
-                product = in.nextLine();
-                //creatOrder(METHOD.Sell.name(), getBestProductByNameAndMethod(product, METHOD.Sell.name(), productObs));
+                if (productObs.isEmpty()) {
+                    System.out.println("Download list of products");
+                } else {
+                    System.out.println("Product name:");
+                    product = in.nextLine();
+                    String bestSell = getBestProductByNameAndMethod(product, METHOD.Sell.name(), productObs);
+                    creatOrder(METHOD.Sell.name(), bestSell);
+                }
                 break;
             case SHOW_TRANSACTION:
                 System.out.println("4");
@@ -67,41 +82,42 @@ public class ProductController {
         }
     }
 
-    /*private static ProductOb getBestProductByNameAndMethod(String product, String method, List<String> productObs) {
+    private static String getBestProductByNameAndMethod(String product, String method, List<String> productObs) {
 
-        if(method.equals(METHOD.Buy.name())){
-            return getMin(productObs.stream().filter(productOb -> productOb.getName().equals(product)).collect(Collectors.toList()));
-        }else if(method.equals(METHOD.Sell.name())){
-            return getMax(productObs.stream().filter(productOb -> productOb.getName().equals(product)).collect(Collectors.toList()));
+        if (method.equals(METHOD.Buy.name())) {
+            return getMin(productObs.stream().filter(productOb -> readProduct.readName(productOb).equals(product)).collect(Collectors.toList()));
+        } else if (method.equals(METHOD.Sell.name())) {
+            return getMax(productObs.stream().filter(productOb -> readProduct.readName(productOb).equals(product)).collect(Collectors.toList()));
         }
 
-        return new ProductOb();
+        return new String();
 
-    }*/
+    }
 
-    private static ProductOb getMin(List<ProductOb> collect) {
+    private static String getMin(List<String> collect) {
 
-        ProductOb smallest = collect.get(0);
-        for(ProductOb productOb : collect){
-            if(productOb.getPriceBuy() < smallest.getPriceBuy()){
+        String smallest = collect.get(0);
+        for (String productOb : collect) {
+            if (Double.parseDouble(readProduct.readBuy(productOb)) < Double.parseDouble(readProduct.readBuy(smallest))) {
                 smallest = productOb;
             }
         }
         return smallest;
     }
 
-    private static ProductOb getMax(List<ProductOb> collect) {
-        ProductOb smallest = collect.get(0);
-        for(ProductOb productOb : collect){
-            if(productOb.getPriceSell() > smallest.getPriceSell()){
-                smallest = productOb;
+    private static String getMax(List<String> collect) {
+
+        String largest = collect.get(0);
+        for (String productOb : collect) {
+            if (Double.parseDouble(readProduct.readSell(productOb)) > Double.parseDouble(readProduct.readSell(largest))) {
+                largest = productOb;
             }
         }
-        return smallest;
+        return largest;
     }
 
 
-    private static void creatOrder(String type, String product) throws Exception  {
+    private static void creatOrder(String type, String product) throws Exception {
         SOAPClient.create(type, product);
     }
 
