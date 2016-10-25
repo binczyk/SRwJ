@@ -39,8 +39,8 @@ public class BackendInterface implements Runnable {
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             ProductOb productOb = productSender.randomProduct();
             productOb.setBackName(QueueCode.MT_TO_BACK_QUEUE.toString() + "." + backNo);
-            ObjectMessage message = session.createObjectMessage();
-            message.setObject(productOb);
+            TextMessage message = session.createTextMessage();
+            message.setText(getPrepareProduct(productOb));
             message.setJMSType("Product");
             message.setStringProperty("WDSR", "ProductProcessor");
             producer.send(message);
@@ -51,16 +51,22 @@ public class BackendInterface implements Runnable {
         }
     }
 
-    private static void initBroker() throws Exception {
-        BrokerService broker = new BrokerService();
-        String bindAddress = "tcp://localhost:" + threadName;
-        broker.addConnector(bindAddress);
-        broker.start();
+    private static String getPrepareProduct(ProductOb productOb) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(productOb.getName());
+        sb.append(";");
+        sb.append(productOb.getPriceBuy());
+        sb.append(";");
+        sb.append(productOb.getPriceSell());
+        sb.append(";");
+        sb.append(productOb.getBackName());
+        return sb.toString();
     }
 
-    public static void receiveMessage(String backNo) throws JMSException {
+    public static String receiveMessage(String backNo) throws JMSException {
         ActiveMQConnection connection;
         Queue queue;
+        String perf = new String();
         try {
             ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
@@ -78,6 +84,7 @@ public class BackendInterface implements Runnable {
                 if (message instanceof TextMessage) {
                     TextMessage textMessage = (TextMessage) message;
                     String[] parts = textMessage.getText().split(";");
+                    perf = "Method: " + parts[1] + ", product: " + parts[0];
                     System.out.println("Method: " + parts[1] + ", product: " + parts[0]);
                 }
             }
@@ -87,6 +94,7 @@ public class BackendInterface implements Runnable {
         } finally {
            /* connection.stop();
             connection.destroyDestination(ActiveMQDestination.transform(queue));*/
+           return perf;
         }
     }
 
@@ -94,10 +102,11 @@ public class BackendInterface implements Runnable {
     public void run() {
         sendProductToQueue(threadName);
         try {
-            initBroker();
             while (true) {
                 System.out.println("Refresh\n");
-                receiveMessage(threadName);
+                if(receiveMessage(threadName).isEmpty()){
+                    Thread.sleep(3000);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

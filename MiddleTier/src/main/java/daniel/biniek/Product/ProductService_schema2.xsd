@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://Product.biniek.daniel/">
+<xs:schema version="1.0" targetNamespace="http://Product.biniek.daniel/" xmlns:tns="http://Product.biniek.daniel/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:import namespace="http://Product.biniek.daniel/" schemaLocation="ProductService_schema1.xsd"/>
+  <xs:element name="JMSException" type="tns:JMSException"/>
 
-  <xs:element name="arg0" nillable="true" type="xs:string"/>
+  <xs:complexType name="JMSException">
+    <xs:sequence>
+      <xs:element name="errorCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="linkedException" type="tns:exception" minOccurs="0"/>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 
-  <xs:element name="arg1" nillable="true" type="xs:string"/>
+  <xs:complexType name="exception">
+    <xs:complexContent>
+      <xs:extension base="tns:throwable">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="arg2" nillable="true" type="xs:string"/>
+  <xs:complexType name="throwable">
+    <xs:sequence>
+      <xs:element name="stackTrace" type="tns:stackTraceElement" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
 
-  <xs:element name="return" nillable="true" type="ns1:productObArray"/>
+  <xs:complexType name="stackTraceElement" final="extension restriction">
+    <xs:sequence/>
+  </xs:complexType>
 </xs:schema>
 

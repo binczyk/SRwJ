@@ -1,7 +1,6 @@
 package daniel.biniek.Product;
 
 import daniel.biniek.jms.MTJms;
-import daniel.biniek.product.ProductOb;
 
 import javax.jms.JMSException;
 import javax.jws.WebService;
@@ -13,7 +12,7 @@ public class ProductServiceImpl implements ProductService{
     private MTJms mtJms = new MTJms();
 
     @Override
-    public ProductOb[] getProducts(){
+    public String[] getProducts(){
         try {
             return prepareProductArray();
         } catch (JMSException e) {
@@ -22,9 +21,9 @@ public class ProductServiceImpl implements ProductService{
         return null;
     }
 
-    private ProductOb[] prepareProductArray() throws JMSException {
-        ArrayList<ProductOb> productList = (ArrayList<ProductOb>) mtJms.receiveMessage();
-        ProductOb[] productObs = new ProductOb[productList.size()];
+    private String[] prepareProductArray() throws JMSException {
+        ArrayList<String> productList = (ArrayList<String>) mtJms.receiveMessage();
+        String[] productObs = new String[productList.size()];
         productObs = productList.toArray(productObs);
         return productObs;
     }

@@ -1,34 +1,33 @@
 package daniel.biniek.Request;
 
-import daniel.biniek.product.Product;
-import daniel.biniek.product.ProductOb;
-
 import javax.xml.soap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class SOAPClient {
 
-    public static List<ProductOb> get() throws SOAPException {
+    public static List<String> get() throws SOAPException {
         return sendRequest("get", new String());
     }
 
-    public static void create(String type, ProductOb product) throws SOAPException {
+    public static void create(String type, String product) throws SOAPException {
         sendRequest("create", type, product);
     }
 
-    private static List<ProductOb> sendRequest(String method, String value, ProductOb ... additionalAttribut) {
-        List<ProductOb> respone = new ArrayList<>();
+    private static List<String> sendRequest(String method, String value, String... additionalAttribut) {
+        List<String> respone = new ArrayList<>();
 
         try {
             SOAPConnection soapConnection = createConnection();
 
             // Send SOAP Message to SOAP Server
             String url = "http://localhost:8080/test";
-            ProductOb pr = additionalAttribut.length > 0 ? additionalAttribut[0]:null;
+            String pr = additionalAttribut.length > 0 ? additionalAttribut[0] : null;
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(method, value, pr), url);
 
             // Process the SOAP Response
-            respone = getSOAPResponse(soapResponse);
+            respone.addAll(getSOAPResponse(soapResponse));
 
             soapConnection.close();
         } catch (Exception e) {
@@ -46,7 +45,7 @@ public class SOAPClient {
     }
 
 
-    private static SOAPMessage createSOAPRequest(String method, String value, ProductOb additionalAttribut) throws Exception {
+    private static SOAPMessage createSOAPRequest(String method, String value, String... additionalAttribut) throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
@@ -69,9 +68,9 @@ public class SOAPClient {
             SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
             soapBodyElem1.addTextNode(value);
             SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("arg1");
-            soapBodyElem2.addTextNode(additionalAttribut.getName());
+            soapBodyElem2.addTextNode(additionalAttribut[0]);
             SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("arg2");
-            soapBodyElem3.addTextNode(additionalAttribut.getBackName());
+            soapBodyElem3.addTextNode(additionalAttribut[1]);
             MimeHeaders headers = soapMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
         }
@@ -81,8 +80,8 @@ public class SOAPClient {
         return soapMessage;
     }
 
-    private static List<ProductOb> getSOAPResponse(SOAPMessage soapResponse) throws Exception {
-        List<ProductOb> products = new ArrayList<>();
+    private static List<String> getSOAPResponse(SOAPMessage soapResponse) throws Exception {
+        List<String> products = new ArrayList<>();
         Iterator iterator = soapResponse.getSOAPBody().getChildElements();
         while (iterator.hasNext()) {
             SOAPElement update = (SOAPElement) iterator.next();
@@ -91,23 +90,16 @@ public class SOAPClient {
                 SOAPElement e = (SOAPElement) ret.next();
                 Iterator item = e.getChildElements();
                 while (item.hasNext()) {
-                    Map<String, String> productMap = new HashMap<>();
                     SOAPElement itemVal = (SOAPElement) item.next();
                     Iterator values = itemVal.getChildElements();
                     while (values.hasNext()) {
-                        SOAPElement lastElement = (SOAPElement) values.next();
-                        productMap.put(lastElement.getLocalName(), lastElement.getValue());
+                        Text lastElement = (Text) values.next();
+                        products.add(lastElement.getValue());
                     }
-                    products.add(preperProduct(productMap));
                 }
             }
         }
         return products;
-    }
-
-    private static ProductOb preperProduct(Map<String, String> productMap) {
-        return new ProductOb(productMap.get("name"), Long.parseLong(productMap.get("id")),
-                Float.parseFloat(productMap.get("priceBuy")), Float.parseFloat(productMap.get("priceSell")), productMap.get("backName"));
     }
 }
 

@@ -14,7 +14,7 @@ public class ProductController {
     private static String CHOOSE_OPTION = "Choose option:";
     private static String BAD_CHOOICE = "It's a bad choice. Try these:";
 
-    private static List<ProductOb> getProducts(String soapAction) throws Exception {
+    private static List<String> getProducts(String soapAction) throws Exception {
         return SOAPClient.get();
     }
 
@@ -42,19 +42,19 @@ public class ProductController {
     public static void chooseAction(Menu menu) throws Exception {
         Scanner in = new Scanner(System.in);
         String product;
-        List<ProductOb> productObs = getProducts(METHOD.get.name());
+        List<String> productObs = getProducts(METHOD.get.name());
         switch (menu) {
             case GET_PRODUCTS:
-                productObs.forEach(pr -> System.out.println(pr.getName() + " buy: " + pr.getPriceBuy() + " sell: " + pr.getPriceSell() + " " + pr.getBackName()));
+                productObs.forEach(pr -> System.out.println(pr));
                 System.out.println();
                 break;
             case BUY_PRODUCTS:
                 product = in.nextLine();
-                creatOrder(METHOD.Buy.name(), getBestProductByNameAndMethod(product, METHOD.Buy.name(), productObs));
+              //  creatOrder(METHOD.Buy.name(), getBestProductByNameAndMethod(product, METHOD.Buy.name(), productObs));
                 break;
             case SELL_PRODUCTS:
                 product = in.nextLine();
-                creatOrder(METHOD.Sell.name(), getBestProductByNameAndMethod(product, METHOD.Sell.name(), productObs));
+                //creatOrder(METHOD.Sell.name(), getBestProductByNameAndMethod(product, METHOD.Sell.name(), productObs));
                 break;
             case SHOW_TRANSACTION:
                 System.out.println("4");
@@ -67,7 +67,7 @@ public class ProductController {
         }
     }
 
-    private static ProductOb getBestProductByNameAndMethod(String product, String method, List<ProductOb> productObs) {
+    /*private static ProductOb getBestProductByNameAndMethod(String product, String method, List<String> productObs) {
 
         if(method.equals(METHOD.Buy.name())){
             return getMin(productObs.stream().filter(productOb -> productOb.getName().equals(product)).collect(Collectors.toList()));
@@ -77,7 +77,7 @@ public class ProductController {
 
         return new ProductOb();
 
-    }
+    }*/
 
     private static ProductOb getMin(List<ProductOb> collect) {
 
@@ -101,7 +101,7 @@ public class ProductController {
     }
 
 
-    private static void creatOrder(String type, ProductOb product) throws Exception  {
+    private static void creatOrder(String type, String product) throws Exception  {
         SOAPClient.create(type, product);
     }
 

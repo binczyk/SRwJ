@@ -1,47 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" targetNamespace="http://Product.biniek.daniel/" xmlns:tns="http://Product.biniek.daniel/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema version="1.0" targetNamespace="http://jaxb.dev.java.net/array" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="JMSException" type="tns:JMSException"/>
-
-  <xs:complexType name="productOb">
+  <xs:complexType name="stringArray" final="#all">
     <xs:sequence>
-      <xs:element name="backName" type="xs:string" minOccurs="0"/>
-      <xs:element name="id" type="xs:long" minOccurs="0"/>
-      <xs:element name="name" type="xs:string" minOccurs="0"/>
-      <xs:element name="priceBuy" type="xs:float"/>
-      <xs:element name="priceSell" type="xs:float"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="JMSException">
-    <xs:sequence>
-      <xs:element name="errorCode" type="xs:string" minOccurs="0"/>
-      <xs:element name="linkedException" type="tns:exception" minOccurs="0"/>
-      <xs:element name="message" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="exception">
-    <xs:complexContent>
-      <xs:extension base="tns:throwable">
-        <xs:sequence/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="throwable">
-    <xs:sequence>
-      <xs:element name="stackTrace" type="tns:stackTraceElement" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="stackTraceElement" final="extension restriction">
-    <xs:sequence/>
-  </xs:complexType>
-
-  <xs:complexType name="productObArray" final="#all">
-    <xs:sequence>
-      <xs:element name="item" type="tns:productOb" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+      <xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

@@ -1,6 +1,5 @@
 package daniel.biniek.jms;
 
-import daniel.biniek.product.ProductOb;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -12,11 +11,12 @@ import java.util.List;
 public class MTJms {
 
     private ActiveMQConnectionFactory connectionFactory;
+    private ReadProduct readProduct = new ReadProduct();
 
-    public List<ProductOb> receiveMessage() throws JMSException {
+    public List<String> receiveMessage() throws JMSException {
         ActiveMQConnection connection;
         Queue queue;
-        ArrayList<ProductOb> productObs = new ArrayList<>();
+        ArrayList<String> productObs = new ArrayList<>();
         try {
             ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(
                     ActiveMQConnection.DEFAULT_BROKER_URL);
@@ -30,11 +30,11 @@ public class MTJms {
             Enumeration<?> messagesInQueue = browser.getEnumeration();
 
             while (messagesInQueue.hasMoreElements()) {
-                ObjectMessage objectMessage = (ObjectMessage) messagesInQueue.nextElement();
-                if (objectMessage.getObject() instanceof ProductOb) {
-                    ProductOb product = (ProductOb) objectMessage.getObject();
-                    System.out.println(product.toString());
-                    productObs.add(product);
+                Message message = (Message) messagesInQueue.nextElement();
+                if (message instanceof TextMessage) {
+                    String prod = readProduct.read(((TextMessage) message).getText());
+                    productObs.add(prod);
+                    System.out.println(prod);
                 }
             }
 

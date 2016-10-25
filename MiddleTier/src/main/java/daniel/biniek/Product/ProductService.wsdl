@@ -3,31 +3,34 @@
 <definitions targetNamespace="http://Product.biniek.daniel/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://Product.biniek.daniel/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <types>
     <xsd:schema>
-      <xsd:import namespace="http://Product.biniek.daniel/" schemaLocation="ProductService_schema1.xsd"/>
+      <xsd:import namespace="http://jaxb.dev.java.net/array" schemaLocation="ProductService_schema1.xsd"/>
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import namespace="http://Product.biniek.daniel/" schemaLocation="ProductService_schema2.xsd"/>
     </xsd:schema>
   </types>
+  <message name="getProducts"/>
+  <message name="getProductsResponse">
+    <part name="return" type="ns1:stringArray" xmlns:ns1="http://jaxb.dev.java.net/array"/>
+  </message>
+  <message name="JMSException">
+    <part name="fault" element="tns:JMSException"/>
+  </message>
   <message name="createOrder">
     <part name="arg0" type="xsd:string"/>
     <part name="arg1" type="xsd:string"/>
     <part name="arg2" type="xsd:string"/>
   </message>
   <message name="createOrderResponse"/>
-  <message name="getProducts"/>
-  <message name="getProductsResponse">
-    <part name="return" type="tns:productObArray"/>
-  </message>
-  <message name="JMSException">
-    <part name="fault" element="tns:JMSException"/>
-  </message>
   <portType name="ProductService">
-    <operation name="createOrder" parameterOrder="arg0 arg1 arg2">
-      <input ns1:Action="http://Product.biniek.daniel/ProductService/createOrderRequest" message="tns:createOrder" xmlns:ns1="http://www.w3.org/2007/05/addressing/metadata"/>
-      <output ns2:Action="http://Product.biniek.daniel/ProductService/createOrderResponse" message="tns:createOrderResponse" xmlns:ns2="http://www.w3.org/2007/05/addressing/metadata"/>
-    </operation>
     <operation name="getProducts">
-      <input ns3:Action="http://Product.biniek.daniel/ProductService/getProductsRequest" message="tns:getProducts" xmlns:ns3="http://www.w3.org/2007/05/addressing/metadata"/>
-      <output ns4:Action="http://Product.biniek.daniel/ProductService/getProductsResponse" message="tns:getProductsResponse" xmlns:ns4="http://www.w3.org/2007/05/addressing/metadata"/>
-      <fault message="tns:JMSException" name="JMSException" ns5:Action="http://Product.biniek.daniel/ProductService/getProducts/Fault/JMSException" xmlns:ns5="http://www.w3.org/2007/05/addressing/metadata"/>
+      <input ns2:Action="http://Product.biniek.daniel/ProductService/getProductsRequest" message="tns:getProducts" xmlns:ns2="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output ns3:Action="http://Product.biniek.daniel/ProductService/getProductsResponse" message="tns:getProductsResponse" xmlns:ns3="http://www.w3.org/2007/05/addressing/metadata"/>
+      <fault message="tns:JMSException" name="JMSException" ns4:Action="http://Product.biniek.daniel/ProductService/getProducts/Fault/JMSException" xmlns:ns4="http://www.w3.org/2007/05/addressing/metadata"/>
+    </operation>
+    <operation name="createOrder" parameterOrder="arg0 arg1 arg2">
+      <input ns5:Action="http://Product.biniek.daniel/ProductService/createOrderRequest" message="tns:createOrder" xmlns:ns5="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output ns6:Action="http://Product.biniek.daniel/ProductService/createOrderResponse" message="tns:createOrderResponse" xmlns:ns6="http://www.w3.org/2007/05/addressing/metadata"/>
     </operation>
   </portType>
 </definitions>
