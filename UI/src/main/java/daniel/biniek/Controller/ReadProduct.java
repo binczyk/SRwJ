@@ -8,12 +8,8 @@ public class ReadProduct {
         String [] value = object.split(";");
         stringBuilder.append("Prodcut: ");
         stringBuilder.append(value[0]);
-        stringBuilder.append(" Buy: ");
-        stringBuilder.append(value[1]);
-        stringBuilder.append(" Sell: ");
-        stringBuilder.append(value[2]);
         stringBuilder.append(" backend: ");
-        stringBuilder.append(value[3]);
+        stringBuilder.append(value[1]);
 
         return stringBuilder.toString();
     }
@@ -21,13 +17,13 @@ public class ReadProduct {
     public String readName(String prod) {
         return prod.split(";")[0];
     }
-    public String readBuy(String prod) {
+    public String readBack(String prod) {
         return prod.split(";")[1];
     }
-    public String readSell(String prod) {
+    public String readPrice(String prod) {
         return prod.split(";")[2];
     }
-    public String readBack(String prod) {
+    public String readAmount(String prod) {
         return prod.split(";")[3];
     }
 }

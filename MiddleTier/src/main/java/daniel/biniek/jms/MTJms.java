@@ -44,7 +44,7 @@ public class MTJms {
         }
     }
 
-    public void sendMessages(String mse, String productName, String backendName) {
+    public void sendMessages(String mse, String productName, String backendName, String price, String amount) {
         try {
             ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
             Connection connection = connectionFactory.createConnection();
@@ -53,7 +53,7 @@ public class MTJms {
             Destination destination = session.createQueue(backendName);
             MessageProducer producer = session.createProducer(destination);
             TextMessage message = session.createTextMessage();
-            message.setText(productName + ";" + mse);
+            message.setText(productName + ";" + mse + ";" + price + ";" + amount);
             producer.send(message);
             System.out.println("Sent: " + message.getText());
         } catch (JMSException e) {

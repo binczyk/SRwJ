@@ -9,6 +9,10 @@
 
   <xs:element name="arg2" nillable="true" type="xs:string"/>
 
+  <xs:element name="arg3" nillable="true" type="xs:string"/>
+
+  <xs:element name="arg4" nillable="true" type="xs:string"/>
+
   <xs:element name="return" nillable="true" type="ns1:stringArray"/>
 </xs:schema>
 

@@ -7,7 +7,7 @@ public class ProductSender {
 
     public ProductOb randomProduct() {
         Product product = getProductById(generator.generateIds());
-        ProductOb productOb = new ProductOb(product.getName(), product.getId(), generator.generatePrice(), generator.generatePrice());
+        ProductOb productOb = new ProductOb(product.getName(), product.getId());
         return productOb;
     }
 

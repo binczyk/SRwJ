@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public void createOrder(String mse, String productName, String destination) {
-        mtJms.sendMessages(mse, productName, destination);
+    public void createOrder(String mse, String productName, String destination, String price, String amount) {
+        mtJms.sendMessages(mse, productName, destination, price, amount);
     }
 }

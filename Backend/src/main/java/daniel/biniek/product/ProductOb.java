@@ -6,26 +6,13 @@ public class ProductOb implements Serializable{
 
     String name;
     Long id;
-    float priceBuy;
-    float priceSell;
+    float price;
     String backName;
+    Long amount;
 
-    public ProductOb() {
-    }
-
-    public ProductOb(String name, Long id, float priceBuy, float priceSell, String backName) {
+    public ProductOb(String name, Long id) {
         this.name = name;
         this.id = id;
-        this.priceBuy = priceBuy;
-        this.priceSell = priceSell;
-        this.backName = backName;
-    }
-
-    public ProductOb(String name, Long id, float buy, float sell) {
-        this.name = name;
-        this.id = id;
-        this.priceSell = sell;
-        this.priceBuy = buy;
     }
 
     public String getName() {
@@ -44,20 +31,12 @@ public class ProductOb implements Serializable{
         this.id = id;
     }
 
-    public float getPriceBuy() {
-        return priceBuy;
+    public float getPrice() {
+        return price;
     }
 
-    public void setPriceBuy(float priceBuy) {
-        this.priceBuy = priceBuy;
-    }
-
-    public float getPriceSell() {
-        return priceSell;
-    }
-
-    public void setPriceSell(float priceSell) {
-        this.priceSell = priceSell;
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public String getBackName() {
@@ -68,14 +47,22 @@ public class ProductOb implements Serializable{
         this.backName = backName;
     }
 
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
     @Override
     public String toString() {
         return "ProductOb{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
-                ", priceBuy=" + priceBuy +
-                ", priceSell=" + priceSell +
+                ", price=" + price +
                 ", backName='" + backName + '\'' +
+                ", amount=" + amount +
                 '}';
     }
 }

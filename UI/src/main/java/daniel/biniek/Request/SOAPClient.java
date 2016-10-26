@@ -16,7 +16,7 @@ public class SOAPClient {
     }
 
     public static void create(String type, String product) throws SOAPException {
-        sendRequest("create", type, readProduct.readName(product), readProduct.readBack(product));
+        sendRequest("create", type, readProduct.readName(product), readProduct.readBack(product), readProduct.readPrice(product), readProduct.readAmount(product));
     }
 
     private static List<String> sendRequest(String method, String... additionalAttribut) {
@@ -30,7 +30,7 @@ public class SOAPClient {
             if (method.equals("get")) {
                 soapResponse = soapConnection.call(getProducts(), url);
             } else {
-                soapResponse = soapConnection.call(createOrder(additionalAttribut[0], additionalAttribut[1], additionalAttribut[2]), url);
+                soapResponse = soapConnection.call(createOrder(additionalAttribut[0], additionalAttribut[1], additionalAttribut[2], additionalAttribut[3], additionalAttribut[4]), url);
             }
 
             // Process the SOAP Response
@@ -94,6 +94,10 @@ public class SOAPClient {
         soapBodyElem2.addTextNode(additionalAttribut[1]);
         SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("arg2");
         soapBodyElem3.addTextNode(additionalAttribut[2]);
+        SOAPElement soapBodyElem4 = soapBodyElem.addChildElement("arg3");
+        soapBodyElem4.addTextNode(additionalAttribut[3]);
+        SOAPElement soapBodyElem5 = soapBodyElem.addChildElement("arg4");
+        soapBodyElem5.addTextNode(additionalAttribut[4]);
         MimeHeaders headers = soapMessage.getMimeHeaders();
         headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
 

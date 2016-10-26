@@ -4,6 +4,15 @@
   <import namespace="http://Product.biniek.daniel/" location="ProductService.wsdl"/>
   <binding name="ProductServiceImplBinding" type="ns1:ProductService" xmlns:ns1="http://Product.biniek.daniel/">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+    <operation name="createOrder">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal" namespace="http://Product.biniek.daniel/"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://Product.biniek.daniel/"/>
+      </output>
+    </operation>
     <operation name="getProducts">
       <soap:operation soapAction=""/>
       <input>
@@ -15,15 +24,6 @@
       <fault name="JMSException">
         <soap:fault name="JMSException" use="literal"/>
       </fault>
-    </operation>
-    <operation name="createOrder">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal" namespace="http://Product.biniek.daniel/"/>
-      </input>
-      <output>
-        <soap:body use="literal" namespace="http://Product.biniek.daniel/"/>
-      </output>
     </operation>
   </binding>
   <service name="ProductServiceImpl">

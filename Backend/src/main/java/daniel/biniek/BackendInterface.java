@@ -55,10 +55,6 @@ public class BackendInterface implements Runnable {
         StringBuilder sb = new StringBuilder();
         sb.append(productOb.getName());
         sb.append(";");
-        sb.append(productOb.getPriceBuy());
-        sb.append(";");
-        sb.append(productOb.getPriceSell());
-        sb.append(";");
         sb.append(productOb.getBackName());
         return sb.toString();
     }
@@ -85,7 +81,7 @@ public class BackendInterface implements Runnable {
                     TextMessage textMessage = (TextMessage) message;
                     String[] parts = textMessage.getText().split(";");
                     perf = "Method: " + parts[1] + ", product: " + parts[0];
-                    System.out.println("Method: " + parts[1] + ", product: " + parts[0]);
+                    System.out.println("Method: " + parts[1] + ", product: " + parts[0] + ", amount: " + parts[3] + ", price: " + parts[2]);
                 }
             }
 

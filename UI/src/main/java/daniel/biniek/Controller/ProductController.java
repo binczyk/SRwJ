@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class ProductController {
 
@@ -45,6 +44,8 @@ public class ProductController {
     public static void chooseAction(Menu menu) throws Exception {
         Scanner in = new Scanner(System.in);
         String product;
+        String price;
+        String amount;
         switch (menu) {
             case GET_PRODUCTS:
                 productObs = getProducts(METHOD.get.name());
@@ -57,8 +58,22 @@ public class ProductController {
                 } else {
                     System.out.println("Product name:");
                     product = in.nextLine();
-                    String best = getBestProductByNameAndMethod(product, METHOD.Buy.name(), productObs);
-                    creatOrder(METHOD.Buy.name(), best);
+                    System.out.println("Product price:");
+                    price = in.nextLine();
+                    System.out.println("Product amount:");
+                    amount = in.nextLine();
+                    try {
+                        Double.parseDouble(price);
+                        Long.parseLong(amount);
+                        String pr = getProductByName(product);
+                        if (!pr.isEmpty()) {
+                            creatOrder(METHOD.Buy.name(), pr.concat(";").concat(price).concat(";").concat(amount));
+                        } else {
+                            System.out.println("Product does not exist!");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Incorect value!");
+                    }
                 }
                 break;
             case SELL_PRODUCTS:
@@ -67,8 +82,22 @@ public class ProductController {
                 } else {
                     System.out.println("Product name:");
                     product = in.nextLine();
-                    String bestSell = getBestProductByNameAndMethod(product, METHOD.Sell.name(), productObs);
-                    creatOrder(METHOD.Sell.name(), bestSell);
+                    System.out.println("Product price:");
+                    price = in.nextLine();
+                    System.out.println("Product amount:");
+                    amount = in.nextLine();
+                    try {
+                        Double.parseDouble(price);
+                        Long.parseLong(amount);
+                        String pr = getProductByName(product);
+                        if (!pr.isEmpty()) {
+                            creatOrder(METHOD.Sell.name(), pr.concat(";").concat(price).concat(";").concat(amount));
+                        } else {
+                            System.out.println("Product does not exist!");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Incorect value!");
+                    }
                 }
                 break;
             case SHOW_TRANSACTION:
@@ -82,38 +111,13 @@ public class ProductController {
         }
     }
 
-    private static String getBestProductByNameAndMethod(String product, String method, List<String> productObs) {
-
-        if (method.equals(METHOD.Buy.name())) {
-            return getMin(productObs.stream().filter(productOb -> readProduct.readName(productOb).equals(product)).collect(Collectors.toList()));
-        } else if (method.equals(METHOD.Sell.name())) {
-            return getMax(productObs.stream().filter(productOb -> readProduct.readName(productOb).equals(product)).collect(Collectors.toList()));
-        }
-
-        return new String();
-
-    }
-
-    private static String getMin(List<String> collect) {
-
-        String smallest = collect.get(0);
-        for (String productOb : collect) {
-            if (Double.parseDouble(readProduct.readBuy(productOb)) < Double.parseDouble(readProduct.readBuy(smallest))) {
-                smallest = productOb;
+    private static String getProductByName(String product) {
+        for (String p : productObs) {
+            if (readProduct.readName(p).equals(product)) {
+                return p;
             }
         }
-        return smallest;
-    }
-
-    private static String getMax(List<String> collect) {
-
-        String largest = collect.get(0);
-        for (String productOb : collect) {
-            if (Double.parseDouble(readProduct.readSell(productOb)) > Double.parseDouble(readProduct.readSell(largest))) {
-                largest = productOb;
-            }
-        }
-        return largest;
+        return "";
     }
 
 
