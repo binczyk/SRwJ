@@ -88,15 +88,15 @@ public class SOAPClient {
         // SOAP Body
         SOAPBody soapBody = envelope.getBody();
         SOAPElement soapBodyElem = soapBody.addChildElement("createOrderRequest", "prod");
-        SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("arg0");
+        SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("method");
         soapBodyElem1.addTextNode(additionalAttribut[0]);
-        SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("arg1");
+        SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("productName");
         soapBodyElem2.addTextNode(additionalAttribut[1]);
-        SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("arg2");
+        SOAPElement soapBodyElem3 = soapBodyElem.addChildElement("destination");
         soapBodyElem3.addTextNode(additionalAttribut[2]);
-        SOAPElement soapBodyElem4 = soapBodyElem.addChildElement("arg3");
+        SOAPElement soapBodyElem4 = soapBodyElem.addChildElement("price");
         soapBodyElem4.addTextNode(additionalAttribut[3]);
-        SOAPElement soapBodyElem5 = soapBodyElem.addChildElement("arg4");
+        SOAPElement soapBodyElem5 = soapBodyElem.addChildElement("amount");
         soapBodyElem5.addTextNode(additionalAttribut[4]);
         MimeHeaders headers = soapMessage.getMimeHeaders();
         headers.addHeader("SOAPAction", serverURI + "createOrderRequest");
