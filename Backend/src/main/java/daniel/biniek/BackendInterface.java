@@ -13,6 +13,7 @@ import java.util.*;
 
 public class BackendInterface implements Runnable {
 
+    private static Long id = 0l;
     private static String threadName;
     private static List<ProductOb> sell = new ArrayList<>();
     private static List<ProductOb> buy = new ArrayList<>();
@@ -95,18 +96,15 @@ public class BackendInterface implements Runnable {
                     ProductOb product = generateProduct(productMap);
 
                     if(parts[1].equals("Sell") && !sell.contains(product) && !all.contains(product)){
-                        product.setId(null);
+                        product.setId(++id);
                         sell.add(product);
                     }else if(parts[1].equals("Buy") && !buy.contains(product)){
+                        product.setId(++id);
                         buy.add(product);
-                        MessageConsumer messageConsumer = session.createConsumer(queue);
-                        messageConsumer.receive();
-
                     }
 
-                    if(!all.contains(product)){
-                        all.add(product);
-                    }
+                    MessageConsumer messageConsumer = session.createConsumer(queue);
+                    messageConsumer.receive();
 
                     performTransaction();
                 }
@@ -125,19 +123,24 @@ public class BackendInterface implements Runnable {
     }
 
     private static void performTransaction() {
+        List<ProductOb> bought = new ArrayList<>();
         if(!sell.isEmpty() && !buy.isEmpty()){
-            for (ProductOb s : sell){
-                for (ProductOb b : buy){
+            for (ProductOb b : buy){
+                for (ProductOb s : sell){
                     if (canBuy(s, b)) {
                         buy(s, b);
+                        bought.add(b);
                     }
                 }
             }
+            buy.removeAll(bought);
         }
     }
 
     private static void buy(ProductOb s, ProductOb b) {
-        System.out.println("Product buy. Name: " + b.getName() + " price: " + s.getPrice() + " amount: " + s.getAmount());
+        String message = "Product buy. Name: " + b.getName() + " price: " + s.getPrice() + " amount: "
+                + s.getAmount() + " buy order: " + b.getId() + " sell order: " + s.getId();
+        System.out.println(message);
         preapareNewValues(s, b);
     }
 
@@ -146,9 +149,9 @@ public class BackendInterface implements Runnable {
         newSellVal.setAmount(s.getAmount() - b.getAmount());
         newSellVal.setName(s.getName());
         newSellVal.setPrice(s.getPrice());
+        newSellVal.setId(s.getId());
 
         sell.add(newSellVal);
-        buy.remove(b);
         sell.remove(s);
     }
 

@@ -5,7 +5,7 @@ public enum Menu {
     GET_PRODUCTS("Get products"),
     SELL_PRODUCTS("Sell product"),
     BUY_PRODUCTS("Buy product"),
-    SHOW_TRANSACTION("Show transaction"),
+    //SHOW_TRANSACTION("Show transaction"),
     EXIT("Exit"),
     BAD("Bad");
 

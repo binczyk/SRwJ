@@ -100,9 +100,9 @@ public class ProductController {
                     }
                 }
                 break;
-            case SHOW_TRANSACTION:
+            /*case SHOW_TRANSACTION:
                 System.out.println("4");
-                break;
+                break;*/
             case EXIT:
                 System.out.println("5");
                 break;
