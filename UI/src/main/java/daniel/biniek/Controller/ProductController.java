@@ -1,6 +1,7 @@
 package daniel.biniek.Controller;
 
 import daniel.biniek.Request.SOAPClient;
+import org.apache.activemq.ActiveMQConnection;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,6 +16,8 @@ public class ProductController {
     private static List<String> productObs = new ArrayList<>();
 
     private static ReadProduct readProduct = new ReadProduct();
+    private static Receiver receiver = new Receiver();
+
 
     private static List<String> getProducts(String soapAction) throws Exception {
         return SOAPClient.get();
@@ -41,64 +44,27 @@ public class ProductController {
         get
     }
 
+    public static void thread(Runnable runnable, boolean daemon) {
+        Thread brokerThread = new Thread(runnable);
+        brokerThread.setDaemon(daemon);
+        brokerThread.start();
+    }
+
+
     public static void chooseAction(Menu menu) throws Exception {
         Scanner in = new Scanner(System.in);
-        String product;
-        String price;
-        String amount;
         switch (menu) {
             case GET_PRODUCTS:
+
                 productObs = getProducts(METHOD.get.name());
                 productObs.forEach(pr -> System.out.println(readProduct.read(pr)));
                 System.out.println();
                 break;
             case BUY_PRODUCTS:
-                if (productObs.isEmpty()) {
-                    System.out.println("Download list of products");
-                } else {
-                    System.out.println("Product name:");
-                    product = in.nextLine();
-                    System.out.println("Product price:");
-                    price = in.nextLine();
-                    System.out.println("Product amount:");
-                    amount = in.nextLine();
-                    try {
-                        Double.parseDouble(price);
-                        Long.parseLong(amount);
-                        String pr = getProductByName(product);
-                        if (!pr.isEmpty()) {
-                            creatOrder(METHOD.Buy.name(), pr.concat(";").concat(price).concat(";").concat(amount));
-                        } else {
-                            System.out.println("Product does not exist!");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Incorect value!");
-                    }
-                }
+                thread(new Notification(), false);
                 break;
             case SELL_PRODUCTS:
-                if (productObs.isEmpty()) {
-                    System.out.println("Download list of products");
-                } else {
-                    System.out.println("Product name:");
-                    product = in.nextLine();
-                    System.out.println("Product price:");
-                    price = in.nextLine();
-                    System.out.println("Product amount:");
-                    amount = in.nextLine();
-                    try {
-                        Double.parseDouble(price);
-                        Long.parseLong(amount);
-                        String pr = getProductByName(product);
-                        if (!pr.isEmpty()) {
-                            creatOrder(METHOD.Sell.name(), pr.concat(";").concat(price).concat(";").concat(amount));
-                        } else {
-                            System.out.println("Product does not exist!");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Incorect value!");
-                    }
-                }
+                sellProduct(in);
                 break;
             /*case SHOW_TRANSACTION:
                 System.out.println("4");
@@ -108,6 +74,63 @@ public class ProductController {
                 break;
             default:
                 System.out.println(BAD_CHOOICE);
+        }
+        thread(new Receiver(), false);
+    }
+
+    private static void sellProduct(Scanner in) throws Exception {
+        String product;
+        String price;
+        String amount;
+        if (productObs.isEmpty()) {
+            System.out.println("Download list of products");
+        } else {
+            System.out.println("Product name:");
+            product = in.nextLine();
+            System.out.println("Product price:");
+            price = in.nextLine();
+            System.out.println("Product amount:");
+            amount = in.nextLine();
+            try {
+                Double.parseDouble(price);
+                Long.parseLong(amount);
+                String pr = getProductByName(product);
+                if (!pr.isEmpty()) {
+                    creatOrder(METHOD.Sell.name(), pr.concat(";").concat(price).concat(";").concat(amount));
+                } else {
+                    System.out.println("Product does not exist!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Incorect value!");
+            }
+        }
+    }
+
+    private static void buyProduct(Scanner in) throws Exception {
+        String product;
+        String price;
+        String amount;
+        if (productObs.isEmpty()) {
+            System.out.println("Download list of products");
+        } else {
+            System.out.println("Product name:");
+            product = in.nextLine();
+            System.out.println("Product price:");
+            price = in.nextLine();
+            System.out.println("Product amount:");
+            amount = in.nextLine();
+            try {
+                Double.parseDouble(price);
+                Long.parseLong(amount);
+                String pr = getProductByName(product);
+                if (!pr.isEmpty()) {
+                    creatOrder(METHOD.Buy.name(), pr.concat(";").concat(price).concat(";").concat(amount));
+                } else {
+                    System.out.println("Product does not exist!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Incorect value!");
+            }
         }
     }
 

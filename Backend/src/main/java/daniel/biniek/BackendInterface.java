@@ -1,5 +1,6 @@
 package daniel.biniek;
 
+import daniel.biniek.JMS.Notification;
 import daniel.biniek.JMS.QueueCode;
 import daniel.biniek.product.ProductOb;
 import daniel.biniek.product.ProductSender;
@@ -18,6 +19,8 @@ public class BackendInterface implements Runnable {
     private static List<ProductOb> sell = new ArrayList<>();
     private static List<ProductOb> buy = new ArrayList<>();
     private static List<ProductOb> all = new ArrayList<>();
+
+    private static Notification notification = new Notification();
 
     public static void main(String arg[]) throws Exception {
         ServerSocket socket = new ServerSocket(0);
@@ -122,7 +125,7 @@ public class BackendInterface implements Runnable {
         }
     }
 
-    private static void performTransaction() {
+    private static void performTransaction() throws Exception {
         List<ProductOb> bought = new ArrayList<>();
         if(!sell.isEmpty() && !buy.isEmpty()){
             for (ProductOb b : buy){
@@ -137,9 +140,10 @@ public class BackendInterface implements Runnable {
         }
     }
 
-    private static void buy(ProductOb s, ProductOb b) {
+    private static void buy(ProductOb s, ProductOb b) throws Exception {
         String message = "Product buy. Name: " + b.getName() + " price: " + s.getPrice() + " amount: "
                 + s.getAmount() + " buy order: " + b.getId() + " sell order: " + s.getId();
+        notification.sendNotification(message);
         System.out.println(message);
         preapareNewValues(s, b);
     }
@@ -172,8 +176,12 @@ public class BackendInterface implements Runnable {
 
     @Override
     public void run() {
-        sendProductToQueue(threadName);
         try {
+            notification.sendNotification("backend started: " + threadName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*try {
             while (true) {
                 System.out.println("Refresh\n");
                 if(receiveMessage(threadName).isEmpty()){
@@ -182,7 +190,7 @@ public class BackendInterface implements Runnable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void start() {

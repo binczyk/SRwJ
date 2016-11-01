@@ -71,5 +71,15 @@
             <artifactId>spring-shell</artifactId>
             <version>1.0.0.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-kahadb-store</artifactId>
+            <version>5.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+            <version>5.13.2</version>
+        </dependency>
     </dependencies>
 </project>
