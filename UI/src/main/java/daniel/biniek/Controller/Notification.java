@@ -11,7 +11,7 @@ public class Notification implements Runnable{
     private static final String TOPIC = "NOTIFICATION";
 
     public void run() {
-        String notification = "WIELKA DUPA!!!";
+        String notification = "TEST TEST TEST";
         try {
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
                     URL);
