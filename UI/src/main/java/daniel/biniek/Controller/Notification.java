@@ -13,10 +13,11 @@ public class Notification implements Runnable{
     public void run() {
         String notification = "WIELKA DUPA!!!";
         try {
-            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(URL);
+            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
+                    URL);
             Connection connection = connectionFactory.createConnection();
             connection.start();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Session session = connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
             Destination destination = session.createQueue(TOPIC);
             MessageProducer producer = session.createProducer(destination);
             TextMessage message = session.createTextMessage();

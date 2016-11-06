@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class UserInterface {
 
     private static ProductController productController = new ProductController();
-    private static final String URL = "tcp://localhost:61666";
+    private static final String URL = "vm://localhost:61666";
 
 
     public static void main(String arg[]) throws Exception {

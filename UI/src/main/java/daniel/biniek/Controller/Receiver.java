@@ -23,7 +23,7 @@ public class Receiver implements ExceptionListener, Runnable {
             connectionFactory = new ActiveMQConnectionFactory(URL);
             connection = connectionFactory.createTopicConnection();
             connection.start();
-            session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+            session = connection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
             destination = session.createTopic(TOPIC);
 
             MessageConsumer consumer = session.createSubscriber(destination);
