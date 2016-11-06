@@ -2,6 +2,7 @@ package daniel.biniek.Market;
 
 import daniel.biniek.Controller.Menu;
 import daniel.biniek.Controller.ProductController;
+import org.apache.activemq.broker.BrokerFactory;
 import org.apache.activemq.broker.BrokerService;
 
 import java.util.Scanner;
@@ -13,10 +14,7 @@ public class UserInterface {
 
 
     public static void main(String arg[]) throws Exception {
-        BrokerService broker = new BrokerService();
-        broker.addConnector(URL);
-        broker.setPersistent(true);
-        broker.start();
+        initBroker();
 
         Scanner in = new Scanner(System.in);
         String option = new String();
@@ -26,5 +24,12 @@ public class UserInterface {
             Menu menu = productController.convertStringToMenu(option);
             productController.chooseAction(menu);
         }
+    }
+
+    private static void initBroker() throws Exception {
+        BrokerService broker = new BrokerService();
+        broker.setPersistent(false);
+        broker.addConnector(URL);
+        broker.start();
     }
 }

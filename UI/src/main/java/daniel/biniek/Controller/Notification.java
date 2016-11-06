@@ -7,7 +7,7 @@ import javax.jms.*;
 
 public class Notification implements Runnable{
 
-    private static final String URL = "vm://localhost";
+    private static final String URL = "vm://localhost:61666";
     private static final String TOPIC = "NOTIFICATION";
 
     public void run() {
@@ -23,7 +23,6 @@ public class Notification implements Runnable{
             message.setText(notification);
             producer.send(message);
             System.out.println("Sent: " + message.getText());
-            System.out.println(notification );
             session.close();
             connection.close();
         } catch (Exception e) {

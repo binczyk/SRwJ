@@ -22,12 +22,12 @@ public class Receiver implements ExceptionListener, Runnable {
         try {
             connectionFactory = new ActiveMQConnectionFactory(URL);
             connection = connectionFactory.createTopicConnection();
-            connection.setClientID("receiveMessage");
             connection.start();
             session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
             destination = session.createTopic(TOPIC);
 
             MessageConsumer consumer = session.createSubscriber(destination);
+           // consumer.setMessageListener(new ConsumerMessageListener());
             Message message = consumer.receive(1000);
             if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
@@ -40,7 +40,6 @@ public class Receiver implements ExceptionListener, Runnable {
 
             consumer.close();
             session.close();
-            connection.close();
         } catch (Exception e) {
             System.out.println("Caught: " + e);
             e.printStackTrace();
