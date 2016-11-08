@@ -142,7 +142,7 @@ public class BackendInterface implements Runnable {
 
     private static void buy(ProductOb s, ProductOb b) throws Exception {
         String message = "Product buy. Name: " + b.getName() + " price: " + s.getPrice() + " amount: "
-                + s.getAmount() + " buy order: " + b.getId() + " sell order: " + s.getId();
+                + getAmount(s, b) + " buy order: " + b.getId() + " sell order: " + s.getId();
         notification.sendNotification(message);
         //System.out.println(message);
         preapareNewValues(s, b);
@@ -150,7 +150,7 @@ public class BackendInterface implements Runnable {
 
     private static void preapareNewValues(ProductOb s, ProductOb b) {
         ProductOb newSellVal = new ProductOb();
-        newSellVal.setAmount(s.getAmount() - b.getAmount());
+        newSellVal.setAmount(s.getAmount() - getAmount(s, b));
         newSellVal.setName(s.getName());
         newSellVal.setPrice(s.getPrice());
         newSellVal.setId(s.getId());
@@ -159,9 +159,13 @@ public class BackendInterface implements Runnable {
         sell.remove(s);
     }
 
+    private static Long getAmount(ProductOb s, ProductOb b) {
+        return s.getAmount() >= b.getAmount() ? b.getAmount():s.getAmount();
+    }
+
     private static boolean canBuy(ProductOb s, ProductOb b) {
         return s.getName().equals(b.getName())
-                && s.getAmount() >= b.getAmount()
+                && s.getAmount() > 0
                 && s.getPrice() <= b.getPrice();
     }
 
