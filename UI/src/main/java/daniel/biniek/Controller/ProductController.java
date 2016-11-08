@@ -43,13 +43,6 @@ public class ProductController {
         get
     }
 
-    public static void thread(Runnable runnable, boolean daemon) {
-        Thread brokerThread = new Thread(runnable);
-        brokerThread.setDaemon(daemon);
-        brokerThread.start();
-    }
-
-
     public static void chooseAction(Menu menu) throws Exception {
         Scanner in = new Scanner(System.in);
         switch (menu) {
@@ -71,7 +64,6 @@ public class ProductController {
             default:
                 System.out.println(BAD_CHOOICE);
         }
-        thread(new Receiver(), false);
     }
 
     private static void sellProduct(Scanner in) throws Exception {

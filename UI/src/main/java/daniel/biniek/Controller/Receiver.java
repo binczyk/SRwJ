@@ -1,5 +1,6 @@
 package daniel.biniek.Controller;
 
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class Receiver implements ExceptionListener, Runnable {
 
-    private static final String URL = "vm://localhost:61666";
+    private static final String URL = "tcp://localhost";
     private static final String TOPIC = "NOTIFICATION";
 
 
@@ -20,10 +21,10 @@ public class Receiver implements ExceptionListener, Runnable {
         TopicSession session;
         Topic destination;
         try {
-            connectionFactory = new ActiveMQConnectionFactory(URL);
+            connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
             connection = connectionFactory.createTopicConnection();
             connection.start();
-            session = connection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+            session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
             destination = session.createTopic(TOPIC);
 
             MessageConsumer consumer = session.createSubscriber(destination);
@@ -38,8 +39,8 @@ public class Receiver implements ExceptionListener, Runnable {
                 System.out.println("class Received: " + message);
             }*/
 
-            consumer.close();
-            session.close();
+            //consumer.close();
+            //session.close();
         } catch (Exception e) {
             System.out.println("Caught: " + e);
             e.printStackTrace();

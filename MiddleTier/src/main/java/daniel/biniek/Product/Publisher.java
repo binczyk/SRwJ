@@ -10,8 +10,8 @@ public class Publisher {
         Endpoint.publish("http://localhost:8080/test", new ProductServiceImpl());
         System.out.println("endpoint stated");
 
-        initBroker();
-        System.out.println("broker started");
+        //initBroker();
+        //System.out.println("broker started");
     }
 
     private static void initBroker() throws Exception {

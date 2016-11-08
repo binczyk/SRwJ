@@ -8,30 +8,25 @@ import javax.jms.*;
 
 public class Notification {
 
-    private static final String URL = "tcp://localhost:61666";
+    private static final String URL = "tcp://localhost";
     private static final String TOPIC = "NOTIFICATION";
 
 
     public void sendNotification(String notification) throws Exception {
-        BrokerService broker = new BrokerService();
-        broker.addConnector(URL);
-        broker.start();
         try {
-            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(URL);
+            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
             Connection connection = connectionFactory.createConnection();
             connection.start();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue(TOPIC);
+            Destination destination = session.createTopic(TOPIC);
             MessageProducer producer = session.createProducer(destination);
             TextMessage message = session.createTextMessage();
             message.setText(notification);
             producer.send(message);
             System.out.println("Sent: " + message.getText());
-            System.out.println(notification );
+            System.out.println(notification);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            broker.stop();
         }
     }
 
